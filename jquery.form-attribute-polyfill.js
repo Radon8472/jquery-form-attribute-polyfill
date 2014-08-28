@@ -2,7 +2,7 @@ $(function() {
     // search elements that has 'form' attribute
     $("[form]").each(function() {
         var e = $(this), that = this,
-            tag = this.tagName.toLowerCase()
+            tag = this.tagName.toLowerCase(),
             targetForm = $("#" + e.attr('form'));
 
         //button
@@ -11,7 +11,7 @@ $(function() {
             e.on('click', function() {
                 targetForm.trigger(action[0]); // reset or submit
             });
-        } else if (tag.match(/^(select|textarea)$/i)) {
+        } else if (tag.match(/^(select|textarea|option)$/i)) {
             targetForm.on('submit', function() {
                 var IDENTIFYER = "__copied__",
                     copy = e.clone().addClass(IDENTIFYER).hide().val(e.val()).text(e.text());
