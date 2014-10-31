@@ -7,33 +7,37 @@ $(function() {
     }
     // detect if browser supports this
     if (elements.get(0).form instanceof HTMLFormElement) {
-        // browser supports, no need to fix
+        // browser supports it, no need to fix
         return;
     }
+    var _IDENTIFYER = "__copied__";
     // OK, here we go.
     elements.each(function() {
         var e = $(this), that = this,
             tag = this.tagName.toLowerCase(),
             targetForm = $("#" + e.attr('form'));
 
-        //button
-        var action;
-        if (tag === "input" && this.type && (action = this.type.match(/^(reset|submit)$/i))) {
+        var type;
+        if (tag === "input" && this.type && (type = this.type.match(/^(reset|submit)$/i))) {
+            //button
             e.on('click', function() {
+                if (this.value) {
+                    targetForm.append(
+                        $('<input>').attr('type', 'hidden').addClass(_IDENTIFYER).attr('name', this.name).val(this.value)
+                    );
+                }
                 targetForm.trigger(action[0]); // reset or submit
             });
-        } else if (tag.match(/^(select|textarea|option)$/i)) {
+        } else if (tag.match(/^(select|textarea|option|input)$/)) {
+            // input
             targetForm.on('submit', function() {
-                var IDENTIFYER = "__copied__",
-                    copy = e.clone().addClass(IDENTIFYER).hide().val(e.val()).text(e.text());
+                var $form = $(this);
                 // remove previous copied elements
-                $(this).find("." + IDENTIFYER).remove();
+                $form.find("." + _IDENTIFYER).remove();
                 // clone a copy to target form, and make it invisible
-                $(this).append(copy);
+                var copy = e.clone().addClass(_IDENTIFYER).hide().val(e.val()).text(e.text());
+                $form.append(copy);
             });
         }
     });
 });
-
-// prevent submition
-// $("form").on("submit", function(){return false});
