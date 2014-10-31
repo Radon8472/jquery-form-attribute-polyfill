@@ -1,43 +1,72 @@
-$(function() {
-    // search elements that has 'form' attribute
-    var elements = $("[form]");
-    if (!elements.length) {
-        // no elements found, no need to fix
-        return;
-    }
+(function($) {
+    /**
+     * polyfill for html5 form attr
+     */
+
     // detect if browser supports this
-    if (elements.get(0).form instanceof HTMLFormElement) {
+    if (window.HTMLFormElement && $('[form]').get(0).form instanceof HTMLFormElement) {
         // browser supports it, no need to fix
         return;
     }
-    var _IDENTIFYER = "__copied__";
-    // OK, here we go.
-    elements.each(function() {
-        var e = $(this), that = this,
-            tag = this.tagName.toLowerCase(),
-            targetForm = $("#" + e.attr('form'));
 
-        var type;
-        if (tag === "input" && this.type && (type = this.type.match(/^(reset|submit)$/i))) {
-            //button
-            e.on('click', function() {
-                if (this.value) {
-                    targetForm.append(
-                        $('<input>').attr('type', 'hidden').addClass(_IDENTIFYER).attr('name', this.name).val(this.value)
-                    );
-                }
-                targetForm.trigger(action[0]); // reset or submit
-            });
-        } else if (tag.match(/^(select|textarea|option|input)$/)) {
-            // input
-            targetForm.on('submit', function() {
-                var $form = $(this);
-                // remove previous copied elements
-                $form.find("." + _IDENTIFYER).remove();
-                // clone a copy to target form, and make it invisible
-                var copy = e.clone().addClass(_IDENTIFYER).hide().val(e.val()).text(e.text());
-                $form.append(copy);
-            });
+    /**
+     * Append a field to a form
+     *
+     */
+    $.fn.appendField = function(data) {
+        // for form only
+        if (!this.is('form')) return;
+
+        // wrap data
+        if (!$.isArray(data) && data.name && data.value) {
+            data = [data];
         }
+
+        var $form = this;
+
+        // attach new params
+        $.each(data, function(i, item) {
+            $('<input/>')
+                .attr('type', 'hidden')
+                .attr('name', item.name)
+                .val(item.value).appendTo($form);
+        });
+
+        return $form;
+    };
+
+    /**
+     * Find all input fields with form attribute point to jQuery object
+     *
+     */
+    $('form[id]').submit(function(e) {
+        // serialize data
+        var data = $('[form='+ this.id + ']').serializeArray();
+        // append data to form
+        $(this).appendField(data);
+    }).each(function() {
+        var form = this,
+            $fields = $('[form=' + this.id + ']');
+
+        $fields.filter('button, input').filter('[type=reset],[type=submit]').click(function() {
+            var type = this.type.toLowerCase();
+            if (type === 'reset') {
+                // reset form
+                form.reset();
+                // for elements outside form
+                $fields.each(function() {
+                    this.value = this.defaultValue;
+                    this.checked = this.defaultChecked;
+                }).filter('select').each(function() {
+                    $(this).find('option').each(function() {
+                        this.selected = this.defaultSelected;
+                    });
+                });
+            } else if (type.match(/^submit|image$/i)) {
+                $(form).appendField({name: this.name, value: this.value}).submit();
+            }
+        });
     });
-});
+
+
+})(jQuery);
