@@ -8,6 +8,7 @@ $(function() {
     // detect if browser supports this
     if (elements.get(0).form instanceof HTMLFormElement) {
         // browser supports, no need to fix
+        return;
     }
     // OK, here we go.
     elements.each(function() {
