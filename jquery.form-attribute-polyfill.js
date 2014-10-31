@@ -1,6 +1,16 @@
 $(function() {
     // search elements that has 'form' attribute
-    $("[form]").each(function() {
+    var elements = $("[form]");
+    if (!elements.length) {
+        // no elements found, no need to fix
+        return;
+    }
+    // detect if browser supports this
+    if (elements.get(0).form instanceof HTMLFormElement) {
+        // browser supports, no need to fix
+    }
+    // OK, here we go.
+    elements.each(function() {
         var e = $(this), that = this,
             tag = this.tagName.toLowerCase(),
             targetForm = $("#" + e.attr('form'));
