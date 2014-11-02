@@ -36,7 +36,7 @@
     };
 
     /**
-     * Find all input fields with form attribute point to jQuery object
+     * Find all input fields with form attribute
      *
      */
     $('form[id]').submit(function(e) {
