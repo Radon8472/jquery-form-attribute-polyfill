@@ -3,8 +3,9 @@
      * polyfill for html5 form attr
      */
 
-    // detect if browser supports this
-    if (window.HTMLFormElement && $('[form]').get(0).form instanceof HTMLFormElement) {
+        // detect if browser supports this
+    var sampleElement = $('[form]').get(0);
+    if (sampleElement && window.HTMLFormElement && sampleElement.form instanceof HTMLFormElement) {
         // browser supports it, no need to fix
         return;
     }
