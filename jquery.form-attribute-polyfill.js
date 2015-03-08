@@ -5,7 +5,8 @@
 
         // detect if browser supports this
     var sampleElement = $('[form]').get(0);
-    if (sampleElement && window.HTMLFormElement && sampleElement.form instanceof HTMLFormElement) {
+    var isIE11 = !(window.ActiveXObject) && "ActiveXObject" in window;
+    if (sampleElement && window.HTMLFormElement && sampleElement.form instanceof HTMLFormElement && !isIE11) {
         // browser supports it, no need to fix
         return;
     }
@@ -37,7 +38,7 @@
     };
 
     /**
-     * Find all input fields with form attribute
+     * Find all input fields with form attribute point to jQuery object
      *
      */
     $('form[id]').submit(function(e) {
