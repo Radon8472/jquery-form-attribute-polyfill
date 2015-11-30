@@ -42,13 +42,15 @@
      *
      */
     $('form[id]').submit(function(e) {
+        var $form = $(this);
         // serialize data
-        var data = $('[form='+ this.id + ']').serializeArray();
+        var data = $('[form='+ $form.attr('id') + ']').serializeArray();
         // append data to form
-        $(this).appendField(data);
+        $form.appendField(data);
     }).each(function() {
         var form = this,
-            $fields = $('[form=' + this.id + ']');
+            $form = $(form),
+            $fields = $('[form=' + $form.attr('id') + ']');
 
         $fields.filter('button, input').filter('[type=reset],[type=submit]').click(function() {
             var type = this.type.toLowerCase();
