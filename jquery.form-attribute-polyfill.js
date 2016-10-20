@@ -4,9 +4,13 @@
      */
 
         // detect if browser supports this
-    var sampleElement = $('[form]').get(0);
-    var isIE11 = !(window.ActiveXObject) && "ActiveXObject" in window;
-    if (sampleElement && window.HTMLFormElement && sampleElement.form instanceof HTMLFormElement && !isIE11) {
+    var SAMPLE_FORM_NAME = "html-5-polyfill-test";
+    var sampleForm = $("<form id='" + SAMPLE_FORM_NAME + "'/>");
+    var sampleFormAndHiddenInput = sampleForm.add($("<input type='hidden' form='" + SAMPLE_FORM_NAME + "'/>"));
+    sampleFormAndHiddenInput.prependTo('body');
+    var sampleElementFound = sampleForm[0].elements[0];
+    sampleFormAndHiddenInput.remove();
+    if (sampleElementFound) {
         // browser supports it, no need to fix
         return;
     }
