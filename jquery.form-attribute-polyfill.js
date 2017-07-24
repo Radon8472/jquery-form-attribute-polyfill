@@ -19,6 +19,7 @@
      * Append a field to a form
      *
      */
+    var CLASS_NAME_POLYFILL_MARKER = "html-5-polyfill-form-attr-marker";
     $.fn.appendField = function(data) {
         // for form only
         if (!this.is('form')) return;
@@ -35,6 +36,7 @@
             $('<input/>')
                 .attr('type', 'hidden')
                 .attr('name', item.name)
+                .attr('class', CLASS_NAME_POLYFILL_MARKER)
                 .val(item.value).appendTo($form);
         });
 
@@ -45,34 +47,41 @@
      * Find all input fields with form attribute point to jQuery object
      *
      */
-    $('form[id]').submit(function(e) {
+    $('form[id]').submit(function(e, origSubmit) {
+        // clean up form from last submit
+        $('.'+CLASS_NAME_POLYFILL_MARKER, this).remove();
         // serialize data
         var data = $('[form='+ this.id + ']').serializeArray();
+        // add data from external submit, if needed:
+        if (origSubmit && origSubmit.name)
+            data.push({name: origSubmit.name, value: origSubmit.value})
         // append data to form
         $(this).appendField(data);
-    }).each(function() {
-        var form = this,
-            $fields = $('[form=' + this.id + ']');
+    })
 
-        $fields.filter('button, input').filter('[type=reset],[type=submit]').click(function() {
-            var type = this.type.toLowerCase();
-            if (type === 'reset') {
-                // reset form
-                form.reset();
-                // for elements outside form
-                $fields.each(function() {
-                    this.value = this.defaultValue;
-                    this.checked = this.defaultChecked;
-                }).filter('select').each(function() {
-                    $(this).find('option').each(function() {
-                        this.selected = this.defaultSelected;
-                    });
-                });
-            } else if (type.match(/^submit|image$/i)) {
-                $(form).appendField({name: this.name, value: this.value}).submit();
-            }
+//submit and reset behaviour
+    $('button[type=reset], input[type=reset]').click(function() {
+        //extend reset buttons to fields with matching form attribute
+        // reset form
+        var formId = $(this).attr("form");
+        var formJq = $('#'+formId);
+        if (formJq.length)
+            formJq[0].reset();
+        // for elements outside form
+        if (!formId)
+            formId = $(this).closest("form").attr("id");
+        $fields = $('[form=' + formId + ']');
+        $fields.each(function() {
+            this.value = this.defaultValue;
+            this.checked = this.defaultChecked;
+        }).filter('select').each(function() {
+            $(this).find('option').each(function() {
+                this.selected = this.defaultSelected;
+            });
         });
     });
-
-
+    $('button[type=submit], input[type=submit], input[type=image]').click(function() {
+        var formId = $(this).attr("form") || $(this).closest("form").attr("id");
+        $('#'+formId).trigger('submit', this);  //send clicked submit as extra parameter
+    });
 })(jQuery);
