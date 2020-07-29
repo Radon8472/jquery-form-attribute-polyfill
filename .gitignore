@@ -1,0 +1,9 @@
+## Project folders / files
+# PHPStorm
+.idea/
+
+# windows temp-files
+[Tt]humbs.db
+[Dd]esktop.ini
+# ignore mac files
+.DS_Store
