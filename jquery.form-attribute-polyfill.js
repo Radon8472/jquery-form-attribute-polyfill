@@ -52,6 +52,15 @@
             $form = $(form),
             $fields = $('[form=' + $form.attr('id') + ']');
 
+
+        // add the 'submit()' method to all elements outside of the form
+        $fields.each(function(i, item) {
+            item.submit = function() {
+                $(form).submit();
+            };
+        });
+
+
         $fields.filter('button, input').filter('[type=reset],[type=submit]').click(function() {
             var type = this.type.toLowerCase();
             if (type === 'reset') {
