@@ -1,4 +1,4 @@
-# jquery-form-attribute-polyfill
+# Jquery Form-Attribute Polyfill
 JQuery Polyfill for browsers without [form attribute] support
 
 The initial code was collected from Stackoverflow.com Answers in
@@ -6,7 +6,7 @@ The initial code was collected from Stackoverflow.com Answers in
 - [Internet Explorer issue with HTML5 form attribute]
 
 
-In this Repository I try to merge features of answers to create the best code,
+In this eepository I try to merge features of answers to create the best code,
 and rebuild full usebility of [form attribute] on older browser (e.g. InternetExplorer).
 
 
