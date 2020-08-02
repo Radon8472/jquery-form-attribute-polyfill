@@ -1,0 +1,25 @@
+{
+  "name": "jquery-form-attribute-polyfill",
+  "version": "1.0.0",
+  "description": "JQuery Polyfill for browsers without form attribute support",
+  "repository": "github:Radon8472/jquery-form-attribute-polyfill",
+  "keywords": [
+    "jquery",
+    "form-attribute"
+  ],
+  "author": "CodeColorist (https://github.com/ChiChou)",
+  "contributors": [
+    "patstuart (https://stackoverflow.com/users/1459423/patstuart)",
+    "fbrueseke (https://stackoverflow.com/users/8358563/fbrueseke)",
+    "Radon8472 (https://github.com/Radon8472)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Radon8472/jquery-form-attribute-polyfill/issues"
+  },
+  "homepage": "https://github.com/Radon8472/jquery-form-attribute-polyfill#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
